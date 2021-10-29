@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { MatchPassword } from '../validators/match-password';
+import { UniqueUserName } from '../validators/unique-user-name';
 
 @Component({
   selector: 'app-signup',
@@ -12,8 +14,7 @@ export class SignupComponent implements OnInit {
       Validators.required,
       Validators.minLength(3),
       Validators.maxLength(20),
-      Validators.pattern(/^[a-z0-9]+$/)
-    ]),
+    ], [this.uniqueUsername.validate]),
     password: new FormControl(' ', [
       Validators.required,
       Validators.minLength(5),
@@ -24,8 +25,9 @@ export class SignupComponent implements OnInit {
       Validators.minLength(5),
       Validators.maxLength(20)
     ]),
-  });
-  constructor() {}
+  }, {validators: [this.matchPassword.validate] });
+  constructor(private matchPassword: MatchPassword,
+    private uniqueUsername: UniqueUserName) {}
 
   ngOnInit(): void {
     console.log(this.authForm)
